@@ -1,4 +1,4 @@
-﻿namespace VisionApp
+﻿namespace VProCheckRingVISC
 {
     public class CameraIndex : ObservableObject
     {

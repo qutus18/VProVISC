@@ -7,7 +7,7 @@ using System.IO;
 
 namespace VProCheckRingVISC
 {
-    class VisionAppObject
+    class VisionAppObject : ObservableObject
     {
         // Khai báo tool Camera
         private CogAcqFifoEditV2 cogAcqFifoEdit;
@@ -41,13 +41,13 @@ namespace VProCheckRingVISC
         public double MinSharpness
         {
             get { return minSharpness; }
-            set { minSharpness = value; }
+            set { minSharpness = value; OnPropertyChanged("MinSharpness"); }
         }
         private double maxSharpness;
         public double MaxSharpness
         {
             get { return maxSharpness; }
-            set { maxSharpness = value; }
+            set { maxSharpness = value; OnPropertyChanged("MaxSharpness"); }
         }
         // Khai báo tool Display
         private CogDisplay cogDisplayMain = null;

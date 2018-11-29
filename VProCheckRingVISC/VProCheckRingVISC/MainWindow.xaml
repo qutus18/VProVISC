@@ -6,7 +6,7 @@
         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:local="clr-namespace:VProCheckRingVISC"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="1500">
+        Title="MainWindow" Height="600" Width="1500">
     <Window.Resources>
         <ControlTemplate x:Key="btnTemplateDefault" TargetType="{x:Type Button}">
             <Grid>
@@ -38,23 +38,23 @@
             <Menu VerticalAlignment="Center" Height="Auto" FontSize="13.5" FontWeight="DemiBold">
                 <MenuItem Header="File" />
                 <MenuItem Header="Options">
-                    <MenuItem Header="Initial"/>
-                    <MenuItem Header="Setting"/>
+                    <MenuItem Header="Display" PreviewMouseDown="btnMenuSettings_PreviewMouseDown"/>
+                    <MenuItem Header="Settings" PreviewMouseDown="btnMenuSettings_PreviewMouseDown"/>
                 </MenuItem>
                 <MenuItem Header="Help"/>
             </Menu>
         </Grid>
         <!--Grid Main-->
-        <Grid Grid.Row="1">
+        <Grid Name="MainGrid" Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0"/>
                 <ColumnDefinition Width="0"/>
             </Grid.ColumnDefinitions>
             <!--Tab hiển thị chính-->
-            <Grid Grid.Column="0">
+            <Grid Name="MainDisplayGrid" Grid.Column="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="0"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <!--Nút nhấn Menu chính-->
@@ -75,7 +75,7 @@
                 <WindowsFormsHost Grid.Column="1" x:Name="wfDisplayMain" Background="SteelBlue"/>
             </Grid>
             <!--Tab Setting Tool-->
-            <Grid Grid.Column="1">
+            <Grid Name="MainSettingsGrid" Grid.Column="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200"/>
                     <ColumnDefinition Width="*"/>
@@ -101,7 +101,39 @@
                             <Button Grid.Row="2" Style="{StaticResource btnStyleSettingPanel}" PreviewMouseDown="btnSetting_PreviewMouseDown" Margin="10" Height="30" Name="btnSettingFixture" Content="Pattern Fixture"/>
                             <Button Grid.Row="3" Style="{StaticResource btnStyleSettingPanel}" PreviewMouseDown="btnSetting_PreviewMouseDown" Margin="10" Height="30" Name="btnSettingSharpness" Content="Sharpness Tool"/>
                             <Button Grid.Row="4" Style="{StaticResource btnStyleSettingPanel}" PreviewMouseDown="btnSetting_PreviewMouseDown" Margin="10" Height="30" Name="btnSettingFinish" Content="Save Job"/>
-                            <Grid Grid.Row="6" Margin="10" Background="WhiteSmoke" Height="350" VerticalAlignment="Top"/>
+                            <Grid Name="SettingsSmallGrid" Grid.Row="6" Margin="10" Background="WhiteSmoke" Height="350" VerticalAlignment="Top">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="0*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Name="SSmallCamera" Grid.Row="0">
+                                    <StackPanel Margin="5">
+                                        <TextBlock Margin="5, 5, 5, 0" TextWrapping="Wrap" FontStyle="Italic">
+                                        B1: Lựa chọn nguồn Camera <LineBreak/>
+                                        B2: Cài đặt Exposure
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Name="SSmallAlign" Grid.Row="1"/>
+                                <Grid Name="SSmallFixture" Grid.Row="1"/>
+                                <Grid Name="SSmallSharpness" Grid.Row="1">
+                                    <StackPanel Margin="5">
+                                        <TextBlock Margin="5, 5, 5, 0" TextWrapping="Wrap" FontStyle="Italic">
+                                        Cài đặt giá trị giới hạn độ nét. Nhấn save để lưu cấu hình khi tắt chương trình. <LineBreak/>
+                                        </TextBlock>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="Min Value : " Width="70"/>
+                                            <TextBox Name="txtMinSettingsSharpness" Text="{Binding MinSharpness}" Width="80" Margin="5"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="Max Value : " Width="70"/>
+                                            <TextBox Name="txtMaxSettingsSharpness" Text="{Binding MaxSharpness}" Width="80" Margin="5"/>
+                                        </StackPanel>
+                                        <Button Name="btnSaveSharpnessSettings" Content="Save" Margin="30, 25, 30, 0"/>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Name="SSmallFinish" Grid.Row="1"/>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Border>
