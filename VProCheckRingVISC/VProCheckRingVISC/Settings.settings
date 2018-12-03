@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="VProCheckRingVISC" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="MaxSharpness1" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="MinSharpness1" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="MaxSharpness2" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="MinSharpness2" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="UrlCameraJob" Type="System.String" Scope="User">
+      <Value Profile="(Default)">E:\#Latus\VProVISCJob</Value>
+    </Setting>
+    <Setting Name="ImageDBUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">E:\#Latus\VProVISCImage</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

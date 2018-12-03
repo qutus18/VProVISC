@@ -13,6 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
+using System.Drawing.Imaging;
+using System.Windows.Threading;
 
 namespace VProCheckRingVISC
 {
@@ -22,6 +25,8 @@ namespace VProCheckRingVISC
     public partial class MainWindow : Window
     {
         private VisionAppObject cameraMainJob = null;
+        private ICommand p_F3Command;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -31,7 +36,29 @@ namespace VProCheckRingVISC
         private void InitialCameraProgram()
         {
             cameraMainJob = new VisionAppObject();
-            SSmallSharpness.DataContext = cameraMainJob;
+            cameraMainJob.JobDoneNotice += ProcessCameraJobDone;
+            SSmallSharpness1.DataContext = cameraMainJob;
+            SSmallSharpness2.DataContext = cameraMainJob;
+            wfDisplayMain.Child = cameraMainJob.CogDisplayMain;
+        }
+
+        private void ProcessCameraJobDone()
+        {
+            if (cameraMainJob.CheckSharpnessRange()) lblResultMain.Content = "OK";
+            else lblResultMain.Content = "NG";
+            Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.ContextIdle, null);
+            // Lưu ảnh
+            if (!Directory.Exists(Settings.Default.ImageDBUrl)) Directory.CreateDirectory(Settings.Default.ImageDBUrl);
+            string tempUrl = Settings.Default.ImageDBUrl + "\\Image_" + DateTime.Now.ToString("yyMMdd_hhmmss") + ".bmp";
+            using (MemoryStream memory = new MemoryStream())
+            {
+                using (FileStream fs = new FileStream(tempUrl, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    cameraMainJob.CogFixtureTool.Subject.OutputImage.ToBitmap().Save(memory, ImageFormat.Bmp);
+                    byte[] bytes = memory.ToArray();
+                    fs.Write(bytes, 0, bytes.Length);
+                }
+            }
         }
 
         private void btnSetting_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -39,7 +66,7 @@ namespace VProCheckRingVISC
             switch ((sender as Button).Name)
             {
                 case "btnSettingCameraInitial":
-                    wfSettingPanel.Child = cameraMainJob.CogAcqFifoEdit;
+                    wfSettingPanel.Child = cameraMainJob.ImageInputTool as System.Windows.Forms.Control;
                     ChangeSettingsSmallGrid("Camera");
                     break;
                 case "btnSettingAlign":
@@ -50,13 +77,20 @@ namespace VProCheckRingVISC
                     wfSettingPanel.Child = cameraMainJob.CogFixtureTool;
                     ChangeSettingsSmallGrid("Fixture");
                     break;
-                case "btnSettingSharpness":
-                    wfSettingPanel.Child = cameraMainJob.SharpnessToolEdit;
+                case "btnSettingSharpness1":
+                    wfSettingPanel.Child = cameraMainJob.SharpnessToolEdit1;
                     // Testing
-                    ChangeSettingsSmallGrid("Sharpness");
+                    ChangeSettingsSmallGrid("Sharpness1");
+                    break;
+                case "btnSettingSharpness2":
+                    wfSettingPanel.Child = cameraMainJob.SharpnessToolEdit2;
+                    // Testing
+                    ChangeSettingsSmallGrid("Sharpness2");
                     break;
                 case "btnSettingFinish":
                     wfSettingPanel.Child = null;
+                    cameraMainJob.SaveCameraJobToUrl();
+                    MessageBox.Show("Save Job Done!");
                     // Testing
                     ChangeSettingsSmallGrid("Finish");
                     break;
@@ -110,6 +144,59 @@ namespace VProCheckRingVISC
                 default:
                     break;
             }
+        }
+
+        /// <summary>
+        /// Lựa chọn mode Input Image từ button Radio
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void radioModeImagebtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if ((sender as RadioButton).Content.ToString().IndexOf("0") > 0) cameraMainJob.ImageInputMode = 0;
+            else cameraMainJob.ImageInputMode = 1;
+            wfSettingPanel.Child = cameraMainJob.ImageInputTool as System.Windows.Forms.Control;
+        }
+
+        /// <summary>
+        /// Nút nhấn chạy Job Camera
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuItemRunJob_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            cameraMainJob.RunJob();
+        }
+
+        /// <summary>
+        /// Lưu giá trị cài đặt độ nét 1
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnSaveSharpnessSettings1_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Settings.Default.MinSharpness1 = cameraMainJob.MinSharpness1;
+            Settings.Default.MaxSharpness1 = cameraMainJob.MaxSharpness1;
+            Settings.Default.Save();
+        }
+
+        /// <summary>
+        /// Lưu giá trị cài đặt độ nét 2
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnSaveSharpnessSettings2_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Settings.Default.MinSharpness2 = cameraMainJob.MinSharpness2;
+            Settings.Default.MaxSharpness2 = cameraMainJob.MaxSharpness2;
+            Settings.Default.Save();
+        }
+
+        private void BtnTriggerMain_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            lblResultMain.Content = "";
+            Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.ContextIdle, null);
+            cameraMainJob.RunJob();
         }
     }
 }

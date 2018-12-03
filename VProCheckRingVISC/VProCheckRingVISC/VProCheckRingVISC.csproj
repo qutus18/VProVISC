@@ -79,6 +79,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files\Cognex\VisionPro\ReferencedAssemblies\Cognex.VisionPro.Display.Controls.dll</HintPath>
     </Reference>
+    <Reference Include="Cognex.VisionPro.ImageFile, Version=63.0.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files\Cognex\VisionPro\ReferencedAssemblies\Cognex.VisionPro.ImageFile.dll</HintPath>
+    </Reference>
+    <Reference Include="Cognex.VisionPro.ImageFile.Controls, Version=63.0.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files\Cognex\VisionPro\ReferencedAssemblies\Cognex.VisionPro.ImageFile.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="Cognex.VisionPro.ImageProcessing, Version=63.0.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files\Cognex\VisionPro\ReferencedAssemblies\Cognex.VisionPro.ImageProcessing.dll</HintPath>
@@ -97,6 +105,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -117,6 +126,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="ValueObject\CameraIndex.cs" />
     <Compile Include="ValueObject\IntValueObject.cs" />
     <Compile Include="ValueObject\ObservableObject.cs" />
@@ -157,9 +171,16 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Command\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
